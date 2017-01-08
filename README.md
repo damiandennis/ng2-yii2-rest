@@ -25,7 +25,9 @@ import {User} from "./user.model";
 @Injectable()
 export class UserService extends EndPointService {
     
-  constructor(public http: Http) {}
+  constructor(public http: Http) {
+      super();
+  }
 
   public endPointUrl(): string {
     return "/api/v1/users";
