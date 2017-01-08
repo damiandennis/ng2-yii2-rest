@@ -1,0 +1,27 @@
+{
+  "name": "ng2-yii2-rest",
+  "version": "0.0.1",
+  "description": "A service to join ng2 to yii2.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Damian Dennis",
+  "license": "ISC",
+  "devDependencies": {
+    "@angular/common": "^2.4.2",
+    "@angular/core": "^2.4.2",
+    "@angular/http": "^2.4.2",
+    "@angular/platform-browser": "^2.4.2",
+    "rxjs": "^5.0.3",
+    "zone.js": "^0.7.4",
+    "core-js": "^2.4.1",
+    "typescript": "^2.0.10",
+    "@types/node": "^6.0.58"
+  },
+  "peerDependencies": {
+    "@angular/http": "^2.0.0",
+    "rxjs": "^5.0.3"
+  }
+}
