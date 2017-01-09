@@ -29,7 +29,7 @@ export abstract class AuthService {
     /**
      * Returns the session params to send at session url.
      */
-    protected abstract sessionParams(): {expand: Array<any>};
+    protected abstract sessionParams(): {expand: string};
 
     /**
      * Returns the auth url.
