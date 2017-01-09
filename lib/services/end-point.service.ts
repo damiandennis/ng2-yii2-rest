@@ -2,7 +2,9 @@ import {Http, Headers, RequestOptions, Response} from "@angular/http";
 import objectToParams from "../utils/object.to.params";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export abstract class EndPointService {
 
     /**
@@ -25,7 +27,7 @@ export abstract class EndPointService {
     /**
      * Angular http library
      */
-    protected http: Http;
+    public http: Http;
 
     /**
      * The number of items to show per page.
@@ -126,7 +128,7 @@ export abstract class EndPointService {
      * @param params
      * @returns {EndPointService}
      */
-    public setParams(params: Object) {
+    public setParams(params: any) {
         Object.keys(params).map((id) => {
             this.setParam(id, params[id]);
         });

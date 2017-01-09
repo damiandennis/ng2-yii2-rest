@@ -19,7 +19,7 @@ export declare abstract class EndPointService {
     /**
      * Angular http library
      */
-    protected http: Http;
+    http: Http;
     /**
      * The number of items to show per page.
      * @type {number}
@@ -94,7 +94,7 @@ export declare abstract class EndPointService {
      * @param params
      * @returns {EndPointService}
      */
-    setParams(params: Object): this;
+    setParams(params: any): this;
     /**
      * Fetches the current filters.
      *
