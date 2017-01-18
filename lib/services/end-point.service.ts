@@ -83,14 +83,34 @@ export abstract class EndPointService {
     ];
 
     /**
+     * The headers to send one each request.
+     * @type {Object}
+     * @private
+     */
+    protected headers: {[key: string]: string} = {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    };
+
+    /**
      * Sets the headers for most requests.
      *
      * @returns {RequestOptions}
      * @private
      */
     protected _headerOptions() {
-        let headers = new Headers({ "Content-Type": "application/json", "Accept": "application/json" });
+        let headers = new Headers(this.headers);
         return new RequestOptions({ headers: headers });
+    }
+
+    /**
+     * Appends headers for each request.
+     *
+     * @param id
+     * @param value
+     */
+    public addHeader(id: string, value: string) {
+        this.headers[id] = value;
     }
 
     /**
@@ -170,9 +190,7 @@ export abstract class EndPointService {
 
         let httpUrl = this.fetchEndPoint() + "/" + id;
         let body = JSON.stringify(params);
-        let headers = new Headers({ "Content-Type": "application/json", "Accept": "application/json" });
-        let options = new RequestOptions({ headers: headers });
-
+        let options = this._headerOptions();
         return this.http.patch(httpUrl, body, options)
             .map(res => {
                 return this.initModel(res.json());
@@ -186,8 +204,7 @@ export abstract class EndPointService {
 
         let httpUrl = this.fetchEndPoint();
         let body = JSON.stringify(params);
-        let headers = new Headers({ "Content-Type": "application/json", "Accept": "application/json" });
-        let options = new RequestOptions({ headers: headers });
+        let options = this._headerOptions();
 
         return this.http.post(httpUrl, body, options)
             .map(res => {
@@ -229,8 +246,7 @@ export abstract class EndPointService {
         if (field) {
             httpUrl += "/" + field;
         }
-        let headers = new Headers({ "Content-Type": "application/json", "Accept": "application/json" });
-        let options = new RequestOptions({ headers: headers });
+        let options = this._headerOptions();
 
         return this.http.delete(httpUrl, options);
     }
