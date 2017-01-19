@@ -8,6 +8,10 @@ export declare abstract class AuthService {
     http: Http;
     session: Observable<BaseModel | boolean>;
     user: BehaviorSubject<BaseModel | boolean>;
+    protected _headers: {
+        "Content-Type": string;
+        "Accept": string;
+    };
     /**
      * Returns a model that represents a user of the system (usually UserModel).
      *
@@ -34,6 +38,14 @@ export declare abstract class AuthService {
      * @param params
      */
     protected abstract authParams(params: any): AuthRequestInterface;
+    /**
+     * Adds header
+     *
+     * @param key
+     * @param value
+     * @returns {AuthService}
+     */
+    protected addHeader(key: string, value: string): this;
     /**
      * Authenticates the user...
      *

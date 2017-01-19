@@ -13,6 +13,7 @@ export abstract class AuthService {
     public http: Http;
     public session: Observable<BaseModel|boolean>;
     public user: BehaviorSubject<BaseModel|boolean> = new BehaviorSubject(null);
+    protected _headers = { "Content-Type": "application/json", "Accept": "application/json" };
 
     /**
      * Returns a model that represents a user of the system (usually UserModel).
@@ -44,6 +45,18 @@ export abstract class AuthService {
     protected abstract authParams(params: any): AuthRequestInterface;
 
     /**
+     * Adds header
+     *
+     * @param key
+     * @param value
+     * @returns {AuthService}
+     */
+    protected addHeader(key: string, value: string) {
+        this._headers[key] = value;
+        return this;
+    }
+
+    /**
      * Authenticates the user...
      *
      * @param username
@@ -73,7 +86,7 @@ export abstract class AuthService {
           return this.session;
         }
 
-        let headers = new Headers({ "Accept": "application/json" });
+        let headers = new Headers(this._headers);
         let options = new RequestOptions({ headers: headers });
         let body = objectToParams(this.sessionParams());
         let userDetails =  this.http.get(this.sessionUrl() + "?" + body, options);

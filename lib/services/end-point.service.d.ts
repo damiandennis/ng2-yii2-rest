@@ -67,12 +67,27 @@ export declare abstract class EndPointService {
      */
     protected allowedParams: Array<string>;
     /**
+     * The headers to send one each request.
+     * @type {Object}
+     * @private
+     */
+    protected headers: {
+        [key: string]: string;
+    };
+    /**
      * Sets the headers for most requests.
      *
      * @returns {RequestOptions}
      * @private
      */
     protected _headerOptions(): RequestOptions;
+    /**
+     * Appends headers for each request.
+     *
+     * @param id
+     * @param value
+     */
+    addHeader(id: string, value: string): void;
     /**
      * Sets a single parameter.
      *
