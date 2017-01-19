@@ -51,7 +51,7 @@ export abstract class AuthService {
      * @param value
      * @returns {AuthService}
      */
-    protected addHeader(key: string, value: string) {
+    public addHeader(key: string, value: string) {
         this._headers[key] = value;
         return this;
     }
