@@ -45,7 +45,7 @@ export declare abstract class AuthService {
      * @param value
      * @returns {AuthService}
      */
-    protected addHeader(key: string, value: string): this;
+    addHeader(key: string, value: string): this;
     /**
      * Authenticates the user...
      *
