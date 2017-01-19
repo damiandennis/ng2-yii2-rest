@@ -6,7 +6,6 @@ import { Observable } from "rxjs";
 import { AuthRequestInterface } from "../interfaces/auth-request.interface";
 export declare abstract class AuthService {
     http: Http;
-    session: Observable<BaseModel | boolean>;
     user: BehaviorSubject<BaseModel | boolean>;
     protected _headers: {
         "Content-Type": string;

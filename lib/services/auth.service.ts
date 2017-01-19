@@ -11,7 +11,6 @@ import {AuthRequestInterface} from "../interfaces/auth-request.interface";
 export abstract class AuthService {
 
     public http: Http;
-    public session: Observable<BaseModel|boolean>;
     public user: BehaviorSubject<BaseModel|boolean> = new BehaviorSubject(null);
     protected _headers = { "Content-Type": "application/json", "Accept": "application/json" };
 
@@ -82,16 +81,12 @@ export abstract class AuthService {
     */
     public fetchSession(): Observable<BaseModel|boolean> {
 
-        if (this.session) {
-          return this.session;
-        }
-
         let headers = new Headers(this._headers);
         let options = new RequestOptions({ headers: headers });
         let body = objectToParams(this.sessionParams());
         let userDetails =  this.http.get(this.sessionUrl() + "?" + body, options);
 
-        this.session = userDetails
+        return userDetails
           .map((data: any) => {
             let user: BaseModel = null;
             let jsonData = data.json();
@@ -106,8 +101,6 @@ export abstract class AuthService {
 
             return user;
           });
-
-        return this.session;
     }
 
     /**
