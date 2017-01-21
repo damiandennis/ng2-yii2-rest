@@ -228,8 +228,7 @@ export abstract class EndPointService {
      * @returns {Observable<Response>}
      */
     public fetchOne(id: number) {
-
-        return this.http.get(this.fetchEndPoint() + "/" + id + "?" + this.paramsToString())
+        return this.http.get(this.fetchEndPoint() + "/" + id + "?" + this.paramsToString(), this._headerOptions())
             .map(res => {
                 return this.initModel(res.json());
             });
@@ -255,7 +254,7 @@ export abstract class EndPointService {
      * Fetches multiple items and returns as one object.
      */
     public fetchResult(): any {
-        return this.http.get(this.endPointUrl() + "?" + this.paramsToString())
+        return this.http.get(this.endPointUrl() + "?" + this.paramsToString(), this._headerOptions())
             .map(res => {
                 return {
                     payload: res.json().map((row: any) => {
@@ -269,7 +268,7 @@ export abstract class EndPointService {
      * Fetches multiple items and separates them into pages.
      */
     public fetchAll () {
-        return this.http.get(this.fetchEndPoint() + "?" + this.paramsToString())
+        return this.http.get(this.fetchEndPoint() + "?" + this.paramsToString(), this._headerOptions())
             .map(res => {
                 return {
                     meta: {
