@@ -111,6 +111,7 @@ export abstract class EndPointService {
      */
     public addHeader(id: string, value: string) {
         this.headers[id] = value;
+        return this;
     }
 
     /**

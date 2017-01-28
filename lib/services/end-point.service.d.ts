@@ -87,7 +87,7 @@ export declare abstract class EndPointService {
      * @param id
      * @param value
      */
-    addHeader(id: string, value: string): void;
+    addHeader(id: string, value: string): this;
     /**
      * Sets a single parameter.
      *
