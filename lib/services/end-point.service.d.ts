@@ -74,6 +74,7 @@ export declare abstract class EndPointService {
     protected headers: {
         [key: string]: string;
     };
+    constructor(http: Http);
     /**
      * Sets the headers for most requests.
      *

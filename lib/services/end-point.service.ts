@@ -92,6 +92,10 @@ export abstract class EndPointService {
         "Accept": "application/json"
     };
 
+    constructor(http: Http) {
+        this.http = http;
+    }
+
     /**
      * Sets the headers for most requests.
      *
