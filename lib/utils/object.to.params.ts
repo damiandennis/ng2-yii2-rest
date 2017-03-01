@@ -7,7 +7,7 @@ import isPrimitive from "./is.primative";
  */
 export default function objectToParams(object: any) {
     return Object.keys(object).map((value) => {
-        let objectValue = isPrimitive(object[value]) ? object[value] : JSON.stringify(object[value]);
+        let objectValue = encodeURIComponent(isPrimitive(object[value]) ? object[value] : JSON.stringify(object[value]));
         return `${value}=${objectValue}`;
     }).join("&");
 }
