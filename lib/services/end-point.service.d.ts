@@ -171,4 +171,10 @@ export declare abstract class EndPointService {
         };
         payload: any;
     }>;
+    /**
+     * Fetches all data from the server using multiple requests
+     * (use sparingly, if using in every circumstance change server default or if results change frequency and are not stable)
+     * 'pageSizeLimit' => [1] is a hacky workaround on server to fetch all results.
+     */
+    fetchComplete(): Promise<{}>;
 }

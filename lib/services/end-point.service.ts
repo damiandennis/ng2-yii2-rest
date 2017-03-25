@@ -288,4 +288,54 @@ export abstract class EndPointService {
                 };
             });
     }
+
+    /**
+     * Fetches all data from the server using multiple requests
+     * (use sparingly, if using in every circumstance change server default or if results change frequency and are not stable)
+     * 'pageSizeLimit' => [1] is a hacky workaround on server to fetch all results.
+     */
+    public fetchComplete() {
+        return new Promise((resolve, reject) => {
+            this.setParam('page', 1)
+                .fetchAll()
+                .subscribe(
+                    (data) => {
+                        let pageCount = Number(data.meta.pageCount);
+                        if (pageCount < 2) {
+                            return data.payload;
+                        } else {
+                            let pagesUpdated = 1;
+                            let combinedData: Array<any> = [];
+                            combinedData.fill([], 0, pageCount - 1);
+                            combinedData[0] = data.payload;
+                            for (let i = 1; i < pageCount; i ++) {
+                                this.setParam('page', i + 1)
+                                    .fetchAll()
+                                    .subscribe(
+                                        (data) => {
+                                            pagesUpdated++;
+                                            combinedData[Number(data.meta.page) - 1] = data.payload;
+                                            //We merge into one once all data is retrieved to ensure correct order.
+                                            if (pagesUpdated === pageCount) {
+                                                let flattenedData: Array<any> = [];
+                                                combinedData.forEach((data) => {
+                                                    flattenedData = flattenedData.concat(data);
+                                                });
+                                                resolve(flattenedData);
+                                            }
+                                        },
+                                        (err) => {
+                                            reject(err);
+                                        }
+                                    );
+                            }
+                        }
+                    },
+                    (err) => {
+                        reject(err);
+                    }
+                )
+        })
+    }
+
 }
