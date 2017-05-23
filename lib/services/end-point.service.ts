@@ -3,6 +3,7 @@ import objectToParams from "../utils/object.to.params";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Injectable} from "@angular/core";
+import {BaseModel} from "../models/base.model";
 
 @Injectable()
 export abstract class EndPointService {
@@ -17,12 +18,12 @@ export abstract class EndPointService {
      *
      * @param data The data for the model.
      */
-    protected abstract initModel(data: any): void;
+    public abstract initModel(data: any): BaseModel;
 
     /**
      * Returns the base endpoint url for this service.
      */
-    protected abstract endPointUrl(): string;
+    public abstract endPointUrl(): string;
 
     /**
      * Angular http library
@@ -33,47 +34,47 @@ export abstract class EndPointService {
      * The number of items to show per page.
      * @type {number}
      */
-    protected perPage: number = 20;
+    public perPage: number = 20;
 
     /**
      * Current page index (perPage times the current offset)
      *
      * @type {number}
      */
-    protected page: number = 1;
+    public page: number = 1;
 
     /**
      * The expandable relationships.
      *
      * @type {Array}
      */
-    protected expand: Array<string> = [];
+    public expand: Array<string> = [];
 
     /**
      * The fields to select
      *
      * @type {Array}
      */
-    protected fields: Array<string> = [];
+    public fields: Array<string> = [];
 
     /**
      * The filters to apply on the search.
      *
      * @type {Array}
      */
-    protected filters: Array<{name: string, value: string, operator?: string}> = [];
+    public filters: Array<{name: string, value: string, operator?: string}> = [];
 
     /**
      *
      * @type {Array}
      */
-    protected sort: Array<{key: string, direction: string}> = [];
+    public sort: Array<{key: string, direction: string}> = [];
 
     /**
      * Parameters that are allowed by setParam and addParam
      * @type {Array}
      */
-    protected allowedParams: Array<string> = [
+    public allowedParams: Array<string> = [
         "perPage",
         "page",
         "expand",
@@ -87,7 +88,7 @@ export abstract class EndPointService {
      * @type {Object}
      * @private
      */
-    protected headers: {[key: string]: string} = {
+    public headers: {[key: string]: string} = {
         "Content-Type": "application/json",
         "Accept": "application/json"
     };
@@ -102,7 +103,7 @@ export abstract class EndPointService {
      * @returns {RequestOptions}
      * @private
      */
-    protected _headerOptions() {
+    public _headerOptions() {
         let headers = new Headers(this.headers);
         return new RequestOptions({ headers: headers });
     }
@@ -174,7 +175,7 @@ export abstract class EndPointService {
      *
      * @returns {string}
      */
-    protected paramsToString() {
+    public paramsToString() {
         let params = {
             "per-page": this.perPage,
             expand: this.expand.join(","),
@@ -272,20 +273,33 @@ export abstract class EndPointService {
     /**
      * Fetches multiple items and separates them into pages.
      */
-    public fetchAll () {
-        return this.http.get(this.fetchEndPoint() + "?" + this.paramsToString(), this._headerOptions())
+    public fetchAll (id: any = null, payloadOnly = false) {
+
+        let url = this.fetchEndPoint();
+        if (id !== null) {
+            url += `/${id}`;
+        }
+        url += "?" + this.paramsToString();
+
+        return this.http.get(url, this._headerOptions())
             .map(res => {
-                return {
-                    meta: {
-                        page: res.headers.get("X-Pagination-Current-Page"),
-                        pageCount: res.headers.get("X-Pagination-Page-Count"),
-                        totalCount: res.headers.get("X-Pagination-Total-Count"),
-                        perPage: res.headers.get("X-Pagination-Per-Page")
-                    },
-                    payload: res.json().map((row: any) => {
+                if (payloadOnly) {
+                    return res.json().map((row: any) => {
                         return this.initModel(row);
-                    })
-                };
+                    });
+                } else {
+                    return {
+                        meta: {
+                            page: res.headers.get("X-Pagination-Current-Page"),
+                            pageCount: res.headers.get("X-Pagination-Page-Count"),
+                            totalCount: res.headers.get("X-Pagination-Total-Count"),
+                            perPage: res.headers.get("X-Pagination-Per-Page")
+                        },
+                        payload: res.json().map((row: any) => {
+                            return this.initModel(row);
+                        })
+                    };
+                }
             });
     }
 
@@ -299,10 +313,10 @@ export abstract class EndPointService {
             this.setParam('page', 1)
                 .fetchAll()
                 .subscribe(
-                    (data) => {
+                    (data: any) => {
                         let pageCount = Number(data.meta.pageCount);
                         if (pageCount < 2) {
-                            return data.payload;
+                            resolve(data.payload);
                         } else {
                             let pagesUpdated = 1;
                             let combinedData: Array<any> = [];
@@ -312,7 +326,7 @@ export abstract class EndPointService {
                                 this.setParam('page', i + 1)
                                     .fetchAll()
                                     .subscribe(
-                                        (data) => {
+                                        (data: any) => {
                                             pagesUpdated++;
                                             combinedData[Number(data.meta.page) - 1] = data.payload;
                                             //We merge into one once all data is retrieved to ensure correct order.

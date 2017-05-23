@@ -1,6 +1,7 @@
 import { Http, RequestOptions, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
+import { BaseModel } from "../models/base.model";
 export declare abstract class EndPointService {
     /**
      * The primary key name.
@@ -11,11 +12,11 @@ export declare abstract class EndPointService {
      *
      * @param data The data for the model.
      */
-    protected abstract initModel(data: any): void;
+    abstract initModel(data: any): BaseModel;
     /**
      * Returns the base endpoint url for this service.
      */
-    protected abstract endPointUrl(): string;
+    abstract endPointUrl(): string;
     /**
      * Angular http library
      */
@@ -24,31 +25,31 @@ export declare abstract class EndPointService {
      * The number of items to show per page.
      * @type {number}
      */
-    protected perPage: number;
+    perPage: number;
     /**
      * Current page index (perPage times the current offset)
      *
      * @type {number}
      */
-    protected page: number;
+    page: number;
     /**
      * The expandable relationships.
      *
      * @type {Array}
      */
-    protected expand: Array<string>;
+    expand: Array<string>;
     /**
      * The fields to select
      *
      * @type {Array}
      */
-    protected fields: Array<string>;
+    fields: Array<string>;
     /**
      * The filters to apply on the search.
      *
      * @type {Array}
      */
-    protected filters: Array<{
+    filters: Array<{
         name: string;
         value: string;
         operator?: string;
@@ -57,7 +58,7 @@ export declare abstract class EndPointService {
      *
      * @type {Array}
      */
-    protected sort: Array<{
+    sort: Array<{
         key: string;
         direction: string;
     }>;
@@ -65,13 +66,13 @@ export declare abstract class EndPointService {
      * Parameters that are allowed by setParam and addParam
      * @type {Array}
      */
-    protected allowedParams: Array<string>;
+    allowedParams: Array<string>;
     /**
      * The headers to send one each request.
      * @type {Object}
      * @private
      */
-    protected headers: {
+    headers: {
         [key: string]: string;
     };
     constructor(http: Http);
@@ -81,7 +82,7 @@ export declare abstract class EndPointService {
      * @returns {RequestOptions}
      * @private
      */
-    protected _headerOptions(): RequestOptions;
+    _headerOptions(): RequestOptions;
     /**
      * Appends headers for each request.
      *
@@ -126,7 +127,7 @@ export declare abstract class EndPointService {
      *
      * @returns {string}
      */
-    protected paramsToString(): string;
+    paramsToString(): string;
     /**
      * Updates a single record.
      */
@@ -147,7 +148,7 @@ export declare abstract class EndPointService {
      * @param id
      * @returns {Observable<Response>}
      */
-    fetchOne(id: number): Observable<void>;
+    fetchOne(id: number): Observable<BaseModel>;
     /**
      * Deletes a single item
      * @param id
@@ -162,15 +163,7 @@ export declare abstract class EndPointService {
     /**
      * Fetches multiple items and separates them into pages.
      */
-    fetchAll(): Observable<{
-        meta: {
-            page: string;
-            pageCount: string;
-            totalCount: string;
-            perPage: string;
-        };
-        payload: any;
-    }>;
+    fetchAll(id?: any, payloadOnly?: boolean): Observable<any>;
     /**
      * Fetches all data from the server using multiple requests
      * (use sparingly, if using in every circumstance change server default or if results change frequency and are not stable)
