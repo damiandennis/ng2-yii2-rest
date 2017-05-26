@@ -195,7 +195,7 @@ export abstract class EndPointService {
      */
     public updateOne(id: number, params: any): any {
 
-        let httpUrl = this.fetchEndPoint() + "/" + id;
+        let httpUrl = this.fetchEndPoint() + "/" + id + "?" + this.paramsToString();
         let body = JSON.stringify(params);
         let options = this._headerOptions();
         return this.http.patch(httpUrl, body, options)
@@ -209,7 +209,7 @@ export abstract class EndPointService {
      */
     public insertOne(params: any): any {
 
-        let httpUrl = this.fetchEndPoint();
+        let httpUrl = this.fetchEndPoint() + "?" + this.paramsToString();
         let body = JSON.stringify(params);
         let options = this._headerOptions();
 
