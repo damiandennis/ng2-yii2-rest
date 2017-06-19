@@ -1,6 +1,6 @@
 {
   "name": "ng2-yii2-rest",
-  "version": "0.0.18",
+  "version": "0.0.20",
   "description": "A service to join ng2 to yii2.",
   "main": "index.js",
   "scripts": {

@@ -4,6 +4,7 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Injectable} from "@angular/core";
 import {BaseModel} from "../models/base.model";
+import isJsObject from "../utils/is.js.object";
 
 @Injectable()
 export abstract class EndPointService {
@@ -194,7 +195,7 @@ export abstract class EndPointService {
      */
     public updateOne(id: number, params: any): any {
 
-        let httpUrl = this.fetchEndPoint() + "/" + id;
+        let httpUrl = this.fetchEndPoint() + "/" + id + "?" + this.paramsToString();
         let body = JSON.stringify(params);
         let options = this._headerOptions();
         return this.http.patch(httpUrl, body, options)
@@ -208,7 +209,7 @@ export abstract class EndPointService {
      */
     public insertOne(params: any): any {
 
-        let httpUrl = this.fetchEndPoint();
+        let httpUrl = this.fetchEndPoint() + "?" + this.paramsToString();
         let body = JSON.stringify(params);
         let options = this._headerOptions();
 
@@ -288,6 +289,7 @@ export abstract class EndPointService {
                         return this.initModel(row);
                     });
                 } else {
+                    let data = res.json();
                     return {
                         meta: {
                             page: res.headers.get("X-Pagination-Current-Page"),
@@ -295,9 +297,9 @@ export abstract class EndPointService {
                             totalCount: res.headers.get("X-Pagination-Total-Count"),
                             perPage: res.headers.get("X-Pagination-Per-Page")
                         },
-                        payload: res.json().map((row: any) => {
-                            return this.initModel(row);
-                        })
+                        payload: isJsObject(data)
+                            ? Object.keys(data).map((key: any) => this.initModel(data[key]))
+                            : data.map((row: any) => this.initModel(row))
                     };
                 }
             });
