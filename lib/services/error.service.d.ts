@@ -6,7 +6,7 @@ export declare class ErrorService {
     forbiddenRoute: string;
     criticalMessage: string;
     forbiddenMessage: string;
-    private unAuthorisedMessage;
+    unAuthorisedMessage: string;
     validationMessage: string;
     constructor(router: Router);
     /**
