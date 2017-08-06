@@ -5,6 +5,7 @@ import "rxjs/add/operator/map";
 import {Injectable} from "@angular/core";
 import {BaseModel} from "../models/base.model";
 import isJsObject from "../utils/is.js.object";
+import * as _ from "lodash";
 
 @Injectable()
 export abstract class EndPointService {
@@ -289,14 +290,24 @@ export abstract class EndPointService {
                         return this.initModel(row);
                     });
                 } else {
-                    let data = res.json();
-                    return {
-                        meta: {
+                    const data = res.json();
+                    const meta = _(res.headers.toJSON())
+                        .mapKeys((v: Array<any>, k: string) => {
+                            return (k.charAt(0).toLowerCase() + k.slice(1)).replace(/-/g,'');
+                        })
+                        .mapValues((v: Array<any>) => {
+                            return v.length == 1 ? v.pop() : v;
+                        })
+                        .assign({ //Added for backward compatibility.
                             page: res.headers.get("X-Pagination-Current-Page"),
                             pageCount: res.headers.get("X-Pagination-Page-Count"),
                             totalCount: res.headers.get("X-Pagination-Total-Count"),
                             perPage: res.headers.get("X-Pagination-Per-Page")
-                        },
+                        })
+                        .value();
+
+                    return {
+                        meta: meta,
                         payload: isJsObject(data)
                             ? Object.keys(data).map((key: any) => this.initModel(data[key]))
                             : data.map((row: any) => this.initModel(row))

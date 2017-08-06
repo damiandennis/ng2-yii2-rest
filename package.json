@@ -13,16 +13,20 @@
     "@angular/common": "^4.0.0",
     "@angular/core": "^4.0.0",
     "@angular/http": "^4.0.0",
-    "@angular/router": "^4.0.0",
     "@angular/platform-browser": "^4.0.0",
-    "rxjs": "^5.1.0",
-    "zone.js": "^0.8.4",
+    "@angular/router": "^4.0.0",
+    "@types/node": "^6.0.60",
     "core-js": "^2.4.1",
+    "rxjs": "^5.1.0",
     "typescript": "^2.2.0",
-    "@types/node": "^6.0.60"
+    "zone.js": "^0.8.4",
+    "@types/lodash": "^4.14.71"
   },
   "peerDependencies": {
     "@angular/http": "^4.0.0",
     "rxjs": "^5.1.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
   }
 }
