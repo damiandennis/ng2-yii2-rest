@@ -84,12 +84,14 @@ export class ErrorService {
                             queryParams: queryParams
                         });
                         break;
-                    default:
                     case 500:
                         this.router.navigate([this.errorRoute], {
                             skipLocationChange: true,
                             queryParams: queryParams
                         });
+                        break;
+                    default:
+                        console.error(error);
                         break;
                 }
             } else {
