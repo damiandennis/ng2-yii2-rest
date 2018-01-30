@@ -59,15 +59,16 @@ export class ErrorService {
      * @param error
      * @param useRouter
      * @param lastLocation
+     * @param excludeRouter
      */
-    response(error: any, useRouter: boolean = false, lastLocation: any = null) {
+    response(error: any, useRouter: boolean = false, lastLocation: any = null, excludeRouter: any = []) {
 
         let queryParams = <any>{};
         if (lastLocation) {
             queryParams.lastLocation = lastLocation;
         }
 
-        if (useRouter) {
+        if (useRouter && excludeRouter.indexOf(error.status) === -1) {
             if (error.status) {
                 switch (error.status) {
                     case 422:
@@ -97,10 +98,12 @@ export class ErrorService {
                 }
             } else {
                 console.error(error);
-                this.router.navigate([this.errorRoute], {
-                    skipLocationChange: true,
-                    queryParams: queryParams
-                });
+                if (excludeRouter.indexOf('no-status') === -1) {
+                    this.router.navigate([this.errorRoute], {
+                        skipLocationChange: true,
+                        queryParams: queryParams
+                    });
+                }
             }
         } else {
             if (error.status) {

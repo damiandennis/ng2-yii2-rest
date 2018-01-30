@@ -39,6 +39,7 @@ export declare class ErrorService {
      * @param error
      * @param useRouter
      * @param lastLocation
+     * @param excludeRouter
      */
-    response(error: any, useRouter?: boolean, lastLocation?: any): void;
+    response(error: any, useRouter?: boolean, lastLocation?: any, excludeRouter?: any): void;
 }
