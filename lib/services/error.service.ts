@@ -85,6 +85,7 @@ export class ErrorService {
                         });
                         break;
                     case 500:
+                        console.error(error);
                         this.router.navigate([this.errorRoute], {
                             skipLocationChange: true,
                             queryParams: queryParams
@@ -95,6 +96,7 @@ export class ErrorService {
                         break;
                 }
             } else {
+                console.error(error);
                 this.router.navigate([this.errorRoute], {
                     skipLocationChange: true,
                     queryParams: queryParams
@@ -112,11 +114,9 @@ export class ErrorService {
                     case 403:
                         this.handleForbiddenResponse(error);
                         break;
+                    default:
                     case 500:
                         this.handleCriticalResponse(error);
-                        break;
-                    default:
-                        console.error(error);
                         break;
                 }
             } else {
