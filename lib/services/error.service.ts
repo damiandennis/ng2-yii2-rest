@@ -112,9 +112,11 @@ export class ErrorService {
                     case 403:
                         this.handleForbiddenResponse(error);
                         break;
-                    default:
                     case 500:
                         this.handleCriticalResponse(error);
+                        break;
+                    default:
+                        console.error(error);
                         break;
                 }
             } else {
