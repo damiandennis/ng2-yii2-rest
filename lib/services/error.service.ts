@@ -74,7 +74,9 @@ export class ErrorService {
                         this.handleValidationResponse(error);
                         break;
                     case 401:
-                        this.router.navigate([this.loginRoute]);
+                        this.router.navigate([this.loginRoute], {
+                            queryParams: queryParams
+                        });
                         break;
                     case 403:
                         this.router.navigate([this.forbiddenRoute], {
